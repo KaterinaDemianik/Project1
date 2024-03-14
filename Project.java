@@ -1,8 +1,10 @@
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
 public class Project{
     public static void main(String [] args){  
-        Scanner scanner=new Scanner(System.in);
-        System.out.println("Введіть рядок цілих чисел*(через пробіл)");
+        try {
+        Scanner scanner = new Scanner(new File("/Users/katerina/Documents/GitHub/Project1/TextFile.txt")); 
         String input=scanner.nextLine();
         String [] dividedNumbersString=input.split(" ");
         String binaryStringSave="";
@@ -34,7 +36,11 @@ public class Project{
 }
     System.out.println("\nМедіана: " + MedianCalculating(numbers));
     System.out.println("Середнє арифметичне: " + AvarageNumberCalculating(numbers));
+} catch (FileNotFoundException e) {
+    System.out.println("Файл 'input.txt' не знайдено.");
+    e.printStackTrace();
 }
+} 
 
 public static void bubbleSort(long[] array) {
     for (int i = 0; i < array.length - 1; i++) {
@@ -82,5 +88,5 @@ public static String decimalToBinNegative(long num) {
         return "-" + decimalToBinNegative(-num);
     else
         return ConvertingDecimalToBinary(num);
-}
+} 
 } 
