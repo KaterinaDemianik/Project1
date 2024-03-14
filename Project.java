@@ -41,4 +41,11 @@ public static String ConvertingDecimalToBinary(long num) {
     }
     return result;
 }
+public static double AvarageNumberCalculating(long[] array) {
+    long sum = 0;
+    for (long num : array) {
+        sum += num;
+    }
+    return (double) sum / array.length;
+}
 } 
