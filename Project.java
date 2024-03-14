@@ -19,6 +19,7 @@ public static void bubbleSort(long[] array) {
         }
     }
 }
+
 public static void MedianCalculating(long[] array){
     int length=array.length;
     if (length% 2==0){
@@ -26,5 +27,18 @@ public static void MedianCalculating(long[] array){
     } else {
         return array[length / 2];
     }
+}
+
+public static String ConvertingDecimalToBinary(long num) {
+    if (num == 0)
+        return "0";
+    String result = "";
+    while (num > 0) {
+        long remainder = num % 2;
+        if (remainder < 10)
+            result = remainder + result;
+        num /=2;
+    }
+    return result;
 }
 } 
