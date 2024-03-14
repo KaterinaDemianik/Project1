@@ -6,7 +6,22 @@ public class Project{
         String input=scanner.nextLine();
         String [] divideNumbersString=input.split(" ");
         String binaryStringSave="";
+
+        long[] numbers = new long[dividedNumbersString.length];
+
+            for (int i = 0; i < dividedNumbersString.length; i++) {
+        String str = dividedNumbersString[i];
+
+    System.out.println("Двійковий рядок:");
+    System.out.println(binaryStringSave); 
+    System.out.println("Відсортований двійковий рядок:");
+    for (long num : numbers) {
+    System.out.print(deimalToBin(num) + " ");
+    System.out.println("\nМедіана: " + AvarageNumberCalculating(numbers));
+    System.out.println("Середнє арифметичне: " + AvarageNumberCalculating(numbers));
 }
+}
+
 
 public static void bubbleSort(long[] array) {
     for (int i = 0; i < array.length - 1; i++) {
@@ -41,6 +56,7 @@ public static String ConvertingDecimalToBinary(long num) {
     }
     return result;
 }
+
 public static double AvarageNumberCalculating(long[] array) {
     long sum = 0;
     for (long num : array) {
