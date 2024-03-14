@@ -19,5 +19,12 @@ public static void bubbleSort(long[] array) {
         }
     }
 }
-
+public static void MedianCalculating(long[] array){
+    int length=array.length;
+    if (length% 2==0){
+        return (array[length / 2] + array[length / 2 - 1]) / 2.0;
+    } else {
+        return array[length / 2];
+    }
+}
 } 
