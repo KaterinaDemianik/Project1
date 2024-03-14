@@ -12,12 +12,29 @@ public class Project{
             for (int i = 0; i < dividedNumbersString.length; i++) {
         String str = dividedNumbersString[i];
 
+        boolean isNegative = str.startsWith("-");
+            long num = 0;
+            boolean value = true;
+            for (int j = (isNegative ? 1 : 0); j < str.length(); j++) {
+                char ch = str.charAt(j);
+                if (ch >= '0' && ch <= '9') {
+                    num = num * 10 + (ch - '0');
+                }
+            }
+
+            if (value) {
+                numbers[i] = isNegative ? -num : num;
+                binaryStringSave += decimalToBin(numbers[i]) + " ";
+            }
+        }
+
     System.out.println("Двійковий рядок:");
-    System.out.println(binaryStringSave); 
+    System.out.println(binaryStringSave);
+    bubbleSort(numbers);
     System.out.println("Відсортований двійковий рядок:");
     for (long num : numbers) {
-    System.out.print(deimalToBin(num) + " ");
-    System.out.println("\nМедіана: " + AvarageNumberCalculating(numbers));
+    System.out.print(decimalToBin(num) + " ");
+    System.out.println("\nМедіана: " + MedianCalculating(numbers));
     System.out.println("Середнє арифметичне: " + AvarageNumberCalculating(numbers));
 }
 }
