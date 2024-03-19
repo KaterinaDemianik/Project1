@@ -42,6 +42,40 @@ public class BaseProject {
         }
         return decimalNumbers;
     }
-    //private static BinaryNumber[] convertToBinary(Long[] decimalNumbers)
-}
+
+    private static BinaryNumber[] convertToBinary(Long[] decimalNumbers) {
+        BinaryNumber[] binaryNumbers = new BinaryNumber[decimalNumbers.length];
+        for (int i = 0; i < decimalNumbers.length; i++) {
+            binaryNumbers[i] = new BinaryNumber(decimalNumbers[i]);{
+                String binary = "";
+                while (decimalNumbers[i] != 0) {
+                    int remainder = (int) (decimalNumbers[i] % 2);
+                    binary = remainder + binary;
+                    decimalNumbers[i] /= 2;
+                }
+            }
+        }
+        return binaryNumbers;
+    }
     
+    //клас, який представляє бінарне число
+    private static class BinaryNumber implements Comparable<BinaryNumber> {
+        private final long value;
+
+    //Конструктор, який створює об'єкт бінарного числа з десяткового числа
+    public BinaryNumber(long decimalNumber) {
+        this.value = Math.min(decimalNumber, Short.MAX_VALUE);
+    }
+
+    //Метод, що повертає значення бінарного числа
+    public long getValue() {
+        return value;
+    }
+
+    //Порівняння двох бінарних чисел
+    @Override
+    public int compareTo(BinaryNumber other) {
+        return Long.compare(this.value, other.value);
+    }
+    }
+}
