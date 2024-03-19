@@ -89,4 +89,23 @@ public static String decimalToBinNegative(long num) {
     else
         return ConvertingDecimalToBinary(num);
 } 
+public static int convertToDecimal(String input, int base) {
+    int value = 0;
+    int length = input.length();
+
+    for (int i = 0; i < length; i++) {
+        char digitChar = input.charAt(length - i - 1);
+        int digitValue;
+
+        if (Character.isDigit(digitChar)) {
+            digitValue = digitChar - '0';
+
+        } else {
+            digitValue = 10 + digitChar - 'a';
+        }
+        value += digitValue * Math.pow(base, i);
+    }
+
+    return value;
+}
 } 
