@@ -27,7 +27,21 @@ public class BaseProject {
         System.out.println(median);
         System.out.println(average);
     }
-    //private static Long[] readDecimalNumbersFromInput()
+     //Метод для зчитування десяткових чисел з консолі
+     private static Long[] readDecimalNumbersFromInput() throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String line = reader.readLine();
+        String[] tokens = line.trim().split("\\s+");
+        Long[] decimalNumbers = new Long[tokens.length];
+        for (int i = 0; i < tokens.length; i++) {
+            try {
+                decimalNumbers[i] = Long.parseLong(tokens[i]);
+            } catch (NumberFormatException e) {
+                // Ігноруємо некоректні числа
+            }
+        }
+        return decimalNumbers;
+    }
     //private static BinaryNumber[] convertToBinary(Long[] decimalNumbers)
 }
     
