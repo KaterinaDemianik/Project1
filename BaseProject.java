@@ -57,22 +57,82 @@ public class BaseProject {
         }
         return binaryNumbers;
     }
+    private static void mergeSort(BinaryNumber[] array, int left, int right) {
+        if (left < right) {
+            int mid = (left + right) / 2;
+            mergeSort(array, left, mid);
+            mergeSort(array, mid + 1, right);
+            merge(array, left, mid, right);
+        }
+    }
+    //Метод для злиття двох підмасивів під час сортування злиттям
+    private static void merge(BinaryNumber[] array, int left, int mid, int right) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        BinaryNumber[] leftArray = new BinaryNumber[n1];
+        BinaryNumber[] rightArray = new BinaryNumber[n2];
+
+        System.arraycopy(array, left, leftArray, 0, n1);
+        System.arraycopy(array, mid + 1, rightArray, 0, n2);
+
+        int i = 0, j = 0;
+        int k = left;
+        while (i < n1 && j < n2) {
+            if (leftArray[i].compareTo(rightArray[j]) <= 0) {
+                array[k] = leftArray[i];
+                i++;
+            } else {
+                array[k] = rightArray[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < n1) {
+            array[k] = leftArray[i];
+            i++;
+            k++;
+        }
+
+        while (j < n2) {
+            array[k] = rightArray[j];
+            j++;
+            k++;
+        }
+    }
     
+    private static long calculateMedian(BinaryNumber[] array) {
+        int size = array.length;
+        if (size % 2 == 0) {
+            return (array[size / 2 - 1].getValue() + array[size / 2].getValue()) / 2;
+        } else {
+            return array[size / 2].getValue();
+        }
+    }
+
+    private static double calculateAverage(BinaryNumber[] array) {
+        long sum = 0;
+        for (BinaryNumber binaryNumber : array) {
+            sum += binaryNumber.getValue();
+        }
+        return (double) sum / array.length;
+    }
     //клас, який представляє бінарне число
     private static class BinaryNumber implements Comparable<BinaryNumber> {
         private final long value;
 
-    //Конструктор, який створює об'єкт бінарного числа з десяткового числа
+    //конструктор, який створює об'єкт бінарного числа з десяткового числа
     public BinaryNumber(long decimalNumber) {
         this.value = Math.min(decimalNumber, Short.MAX_VALUE);
     }
 
-    //Метод, що повертає значення бінарного числа
+    //метод, що повертає значення бінарного числа
     public long getValue() {
         return value;
     }
 
-    //Порівняння двох бінарних чисел
+    //порівняння двох бінарних чисел
     @Override
     public int compareTo(BinaryNumber other) {
         return Long.compare(this.value, other.value);

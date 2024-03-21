@@ -1,1 +1,92 @@
-start
+section .data
+    array DW 10000 DUP(0)   ; масив для зберігання введених чисел
+    count DW 0              ; лічильник кількості чисел
+
+section .text
+    global _start
+
+_start:
+    ; Зчитування введених чисел з stdin
+    mov edi, array          ; реєстр edi вказує на початок масиву
+    mov ecx, 10000          ; обмеження на максимальну кількість чисел
+read_numbers:
+    mov eax, 3              ; системний виклик для читання
+    mov ebx, 0              ; дескриптор stdin
+    mov edx, 255            ; максимальна довжина рядка
+    int 0x80                ; здійснюємо системний виклик
+    cmp eax, 0              ; перевіряємо, чи не закінчився ввід
+    je end_read             ; якщо так, завершуємо читання
+    mov esi, eax            ; esi містить кількість зчитаних символів
+    xor eax, eax            ; обнуляємо eax
+    mov edi, array          ; вказуємо на початок масиву
+    call parse_numbers      ; парсимо числа з рядка
+    inc word [count]        ; збільшуємо лічильник чисел
+    jmp read_numbers        ; повторюємо читання
+
+end_read:
+    ; Сортування бульбашкою
+    mov cx, word [count]    ; cx містить кількість чисел
+    dec cx                  ; cx - 1
+outerLoop:
+    push cx
+    lea si, array
+innerLoop:
+    mov ax, [si]
+    cmp ax, [si+2]
+    jl nextStep
+    xchg [si+2], ax
+    mov [si], ax
+nextStep:
+    add si, 2
+    loop innerLoop
+    pop cx
+    loop outerLoop
+
+    ; Обчислення медіани
+    mov eax, 0              ; сума для обчислення середнього
+    mov edx, 0              ; індекс для вирахування медіани
+    mov cx, word [count]    ; кількість чисел
+    shr cx, 1               ; cx / 2
+    jz calculate_mean       ; якщо кількість чисел = 0, переходимо до обчислення середнього
+    lea si, array           ; si вказує на початок масиву
+    shl cx, 1               ; cx * 2
+    add si, cx              ; переміщуємось до середини масиву
+    mov dx, [si]            ; зчитуємо число, що знаходиться по середині масиву
+    jmp calculate_mean      ; переходимо до обчислення середнього
+
+calculate_mean:
+    mov cx, word [count]    ; cx містить кількість чисел
+    movzx ecx, cx           ; розширюємо cx для використання з float
+    mov eax, 0              ; обнуляємо eax
+    mov edi, array          ; edi вказує на початок масиву
+    mov ebx, 0              ; ebx - індекс елемента
+    mov edx, 0              ; edx - індекс для підрахунку середнього
+calculate_loop:
+    add eax, [edi]          ; додаємо поточний елемент до суми
+    inc ebx                 ; збільшуємо індекс елемента
+    cmp ebx, ecx            ; перевіряємо, чи ми дійшли до кінця масиву
+    je calculate_done       ; якщо так, завершуємо обчислення
+    add edi, 2              ; переміщуємось до наступного елемента
+    jmp calculate_loop      ; повторюємо цикл
+
+calculate_done:
+    movzx ecx, cx           ; розширюємо cx для використання з float
+    mov edx, 0              ; обнуляємо edx
+    div ecx                 ; ділимо суму на кількість чисел
+    mov eax, edx            ; результат ділення у edx
+    call print_decimal      ; виводимо середнє значення
+    mov eax, 1              ; системний виклик для завершення програми
+    xor ebx, ebx            ; код завершення 0
+    int 0x80                ; виконуємо системний виклик
+
+parse_numbers:
+    xor ebx, ebx            ; ebx - локальний лічильник
+parse_loop:
+    cmp byte [edi + ebx], 0    ; перевіряємо, чи досягли кінця рядка
+    je parse_done               ; якщо так, завершуємо парсинг
+    cmp byte [edi + ebx], 0x0D ; перевіряємо, чи символ - CR
+    je skip_char                ; якщо так, пропускаємо його
+    cmp byte [edi + ebx], 0x0A ; перевіряємо, чи символ - LF
+    je skip_char                ; якщо так, пропускаємо його
+    cmp byte [edi + ebx], 32   ; перевіряємо, чи символ - пробіл
+    je skip
