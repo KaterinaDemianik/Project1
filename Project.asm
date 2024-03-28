@@ -7,6 +7,9 @@
 ;dup?-для невизначенності довжини масиву, та для зберігання параметрів 
     currentLine db 255 dup(?)
 ;ініціалізація пустого масиву
+count dw 0
+
+_start: 
 read_next:
 ;мітка для блоку коду для зчитування наступного символу з стандартного вводу 
         mov ah, 3Fh       ; Function 3Fh - read from a file or device
@@ -45,7 +48,7 @@ read_next:
 
 
 ;сортування масиву слів:
-
+bubble_sort: 
 array DW 3, 2, 6, 4, 1 
 ;оголошення масиву 16-бітними (Word) елементів та ініціалізація їхнього значення 
 count DW 5
@@ -82,3 +85,40 @@ nextStep:
 ;відновлення попереднього значення сх з стеку 
     loop outerLoop
 ;повторення зовнішнього циклу, але це для к-ті елементів в масиві -1
+
+
+decimal_to_binary: 
+
+
+calculate_median: 
+mov ax, 0
+mov bx, count
+mov dx, bx
+shr bx, 1         ; розрахунок середнього значення для знаходження медіани
+jnc no_remainder
+inc ax            ; у випадку непарної кількості елементів
+no_remainder:
+mov si, 0
+mov cx, bx        ; використання cx як лічильника для знаходження медіани
+calculate_median_loop:
+add ax, [array + si]
+add si, 2
+loop calculate_median_loop
+mov dx, ax
+mov ax, bx
+div dx            ; ділення суми на кількість елементів
+
+
+calculate_average: 
+mov ax, 0          ; Зберігаємо суму чисел у регістрі AX
+mov si, 0          ; Ініціалізуємо індекс для доступу до елементів масиву
+mov cx, count      ; Копіюємо кількість елементів у лічильник
+calculate_average_loop:
+    add ax, [array + si]  ; Додаємо поточне число до суми
+    add si, 2             ; Переходимо до наступного числа в масиві
+    loop calculate_average_loop  ; Повторюємо для кожного числа у масиві
+
+; Завершуємо обчислення середнього арифметичного, ділячи суму на кількість чисел
+mov dx, 0
+mov bx, count      ; Завантажуємо кількість чисел у регістр BX
+div bx             ; AX = AX / BX
