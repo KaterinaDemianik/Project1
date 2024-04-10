@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 public class Project{
     public static void main(String [] args){  
         try {
-        Scanner scanner = new Scanner(new File("/Users/katerina/Documents/GitHub/Project1/TextFile.txt")); 
+        Scanner scanner = new Scanner(new File("/Users/katerina/My programs/Project/Project1-3/Project1-1/TextTesting.txt")); 
         String input=scanner.nextLine();
         String [] dividedNumbersString=input.split(" ");
         String binaryStringSave="";
