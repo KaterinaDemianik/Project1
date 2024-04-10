@@ -8,6 +8,7 @@
 count dw 0
 
 _start: 
+
 call read_next
 call decimal_to_binary
 call bubble_sort
