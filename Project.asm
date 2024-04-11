@@ -113,14 +113,14 @@ if
 
 ;----------------------------------
 bubble_sort PROC: 
-mov cx, lengthArr
-    sub cx, 1
-    shl cx, 1
-    mov innerLooCn, cx
-        
+mov cx, lengthArr ;кть ел копіювати в масив 
+    sub cx, 1 ;щоб знати скільки порівнянь треба зробити
+    shl cx, 1  ;подвоїти сх бо кожен елемет масиву займає два байти
+    mov innerLoop, cx  ;зберігає кть байтів, які потрібно пройти в внутрішньому циклі.
     shr cx, 1
     add cx, 1
-    mov outerLoopCnt, cx
+    ;кть ітерацій зовн циклу, кть елементів+ 1 
+    mov outerLoop, cx
     xor di, di
     xor cx, cx
     outerLoop:
@@ -128,22 +128,22 @@ mov cx, lengthArr
     innerLoop:
         mov ax, numbers[si]
         cmp ax, numbers[si + 2]
-        jg incIndex
+        jg incIndex ;точка переходу для збільшення індексу іф грейтер, і перевірка на продовж циклу
         xchg numbers[si + 2], ax
         mov numbers[si], ax
         mov cx, 1
     incIndex:
         add si, 2
-        cmp si, innerLooCn
-        jb innerLoop
-        cmp cx, 1
-        jne stopLoops
-        add di, 1
-        cmp di, outerLoopCnt
+        cmp si, innerLoop;порівеює з тим скільки вього треба пройти
+        jb innerLoop ;Jump if Below
+        cmp cx, 1 ;чи були обіміни? 
+        jne stopLoops ;(Jump if Not Equal)обмінів не було
+        add di, 1 ;підрахунок ітерацій, скількм було проходів через масив
+        cmp di, outerLoop
         jb outerLoop
         stopLoops :
-            ret
-    BubbleSort ENDP
+      ret
+     bubble_sort ENDP
 ;----------------------------------
 calculate_median PROC
     mov bx, 2 ;завантажуємо дільник 
