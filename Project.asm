@@ -8,20 +8,24 @@
     minusChar dd ?  ;дабл ворд для індикації мінуса лише як символа
    lengthArr dw ? ;для довжини масиву намберів
 ;----------------------------------
+.code
 _start: 
 
-call read_next
+mov ax, @data ;копіювання адресу сегменту даних в регістр ах
+;доступ до змінних, оголошених в дата
+mov ds, ax ;тепер ця адреса йде в Data Segment 
+;цк для процесора для визначення  базової адреси сегменту даних при доступі до памʼяті через інші регістри 
+;як bx, si, di дозволяє програмі читати з та записувати в змінні, оголошені в .data.
+
+call read_numbers
 call bubble_sort
 call calculate_median
 call printing
 call calculate_average
 call printing
 
-mov eax, 1
-    xor ebx, ebx
-    int 0x80
 ;----------------------------------
-read_next:
+read_next: 
         mov ah, 3Fh      
         mov bx, 0       
         mov cx, 1    
