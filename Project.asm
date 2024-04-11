@@ -31,6 +31,14 @@ mov ax, 4C00h
     int 21h ;функція для переривання дос
 
 ;----------------------------------
+;щоб читати коритувацькі числа та працювати з ними (перед тим в масив покласти їх)
+read_numbers proc
+        xor di, di ;обенулення індексних регістрів. цей для ведення поточного індексу у намберс щоб записувались числа     
+        xor si, si
+        mov numbers[0], 0 ;як індикація ввводу, початку нового рядка, ініціалізація перщого елемету масиву намберс нулем 
+        mov minusChar, '+'  ;відстеження знаку поточних чисел, спочатку завжди припускаємо що наст число позитивне
+
+;----------------------------------
 read_next: 
         mov ah, 3Fh      
         mov bx, 0       
@@ -47,10 +55,11 @@ read_next:
         inc si ; 
         cmp al, 0Ah     
         jz find_string_count_preparation       
-        jmp read_next   
+        jmp read_next 
+        
+        jmp convertChar  
 ;----------------------------------
 decimal_to_binary: 
-	.CODE 
 		MAIN PROC FAR 
 			MOV AX, 
 	@DATA 
@@ -60,8 +69,7 @@ in variable d1
 	mov ax, 
 	d1 
 ;----------------------------------
-print the value 
-	CALL PRINT 
+ PRINT proc
 	MOV AH, 
 	4CH INT 21H 
 
