@@ -72,6 +72,15 @@ convertChar
 mov ax, numbers[di]
 mov cl, oneChar
 
+next:
+    mov si, '1'
+    mov numbers[di], ax
+    jmp read_next
+
+nextNum:
+    mov minusChar, '+'
+    add di, 2
+    mov numbers[di], 0
 
 ;load the value stored; 
 in variable d1 
@@ -138,42 +147,31 @@ if
     dec cx 
         jmp print1 
 
-        
+
 ret 
   convertChar  ENDP
 ;----------------------------------
- PRINT proc
-	MOV AH,02h 
-	4CH INT 21H 
+ PRINTING proc
+	
+mov bx, ax ;збереження числа 
+    cmp ax, 0 ;визначення знаку числа
+    jl negative
+    jmp startOutput
 
-	MAIN ENDP 
-		PRINT PROC 
-	mov cx, 
-	0 mov dx, 0 label1:; 
-if
-	ax is zero 
-		cmp ax, 
-		0 je print1 
-	div bx 
-	push dx 
-	inc cx 
-;set dx to 0 
-	xor dx, 
-	dx 
-		jmp label1 
-			print1:  
-	cmp cx, 
-	0 je exit
-	pop dx 
-	add dx, 
-	48 
-	mov ah, 
-	02h int 21h 
-	dec cx 
-		jmp print1 
-			exit : ret 
-					PRINT ENDP 
-						END MAIN 
+    negative:
+
+    mov ah, 02h  ;02h для виводу символу, а dl отримує код символу мінуса
+    mov dl, '-'
+    int 21h  ; вивід символу мінуса на екран.
+    neg ax ; зиінення знаку числана протилежний 
+
+    MOV AH,02h ;функція дос для виводу символа на екран 
+	 mov dl, 10 ;код символу нового рядка
+     int 21h ; викликає переривання ah dl 
+    xor ax, ax ;обнулення регітстрів 
+    xor dx, dx 
+	 ret
+		PRINT ENDP  
 
 ;----------------------------------
 bubble_sort PROC: 
