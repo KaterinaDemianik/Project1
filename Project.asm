@@ -123,31 +123,24 @@ if
     dx 
         jmp label1 
             print1: 
-  
 ;check if count 
 ;is greater than zero 
     cmp cx, 
     0 je exit
-  
 ;pop the top of stack 
-    pop dx 
-  
+    pop dx  
 ;add 48 so that it 
 ;represents the ASCII 
 ;value of digits 
     add dx, 
-    48 
-  
+    48  
 ;interrupt to print a 
 ;character 
     mov ah, 
     02h int 21h 
-  
 ;decrease the count 
     dec cx 
         jmp print1 
-
-
 ret 
   convertChar  ENDP
 ;----------------------------------
@@ -207,6 +200,37 @@ mov cx, lengthArr ;кть ел копіювати в масив
       ret
      bubble_sort ENDP
 ;----------------------------------
+calculate_average PROC
+    xor di, di ; ді для перебору елементів 
+    xor eax, eax ; для суми чисел 
+    xor ebx, ebx   ;ebx для тимчасовогозберігання поточного елем
+     mov si, lengthArr ;для контролю кті ітерацій
+addingNumbers: ;для перебирання кожного елементу масиву 
+    mov bx, numbers[di]
+
+    cmp bx, 0
+        jl negative
+        add eax, ebx
+        jmp mainCount
+negative:
+        neg bx
+         sub eax, ebx ;для ефективного отримання абсалютного значення негат числа загальної суми
+ mainCount:
+        add di, 2 ; перехід до наст ел масиву 
+        cmp si, 0 ; чи вс оброблено? 
+        ja addingNumbers ;if Above
+
+        divOnSize:
+            cmp eax, 0
+            jg step
+            step:
+            xor edx, edx
+            xor ecx, ecx
+            mov cx, lengthArr
+            div ecx
+            ret
+    calculate_average ENDP
+;----------------------------------
 calculate_median PROC
     mov bx, 2 ;завантажуємо дільник 
     mov di, lengthArr  ;доступ до середніх елеметнів масиву 
@@ -236,23 +260,9 @@ isDivOnTwo: ;перевірка ситуаці коли к-ть ел парна
     shr ax, 1 ;зсув біт в ax на один розряд праворуч, щоб діляттна два
     xor di, di ;поприбирати за собою
     call outputNumbers ;вивод числа
-    ret вихід з методу
+    ret ;вихід з методу
  
  calculate_median ENDP
 
 end start 
-
-
-;----------------------------------
-calculate_average: 
-mov ax, 0  
-mov si, 0   
-mov cx, count  
-;---------------------------------- 
-calculate_average_loop:
-    add ax, [array + si]  
-    add si, 2     
-    loop calculate_average_loop  
-mov dx, 0
-mov bx, count      
-div bx            
+       
