@@ -1,25 +1,26 @@
+;a single 64KB segment
 .model small
-.stack 10000d ;розмір стеку для програми
-.386 ;для більш рошширених інструкцій
+.stack 10000d ;10,000 decimal bytes for the stack
+.386 ;для більш рошширених інструкцій (в джер:allowing 32-bit instructions)
 .data
-    oneChar db ?
-    searchParam db 255 dup(?)
-    currentLine db 255 dup(?)
-count dw 0
-
+    oneChar db ?, '$' ;байтова зміннв для одного симвл(як невизн значення і кінця рядка)
+    numbers dw 20000 Dup(?) ; масив щоб зберігати числа на таку кть слів (вага2-байти)
+    minusChar dd ?  ;дабл ворд для індикації мінуса лише як символа
+   lengthArr dw ? ;для довжини масиву намберів
+;----------------------------------
 _start: 
 
 call read_next
-call decimal_to_binary
 call bubble_sort
 call calculate_median
+call printing
 call calculate_average
+call printing
 
-;вихід
 mov eax, 1
     xor ebx, ebx
     int 0x80
-
+;----------------------------------
 read_next:
         mov ah, 3Fh      
         mov bx, 0       
@@ -37,6 +38,7 @@ read_next:
         cmp al, 0Ah     
         jz find_string_count_preparation       
         jmp read_next   
+;----------------------------------
 decimal_to_binary: 
 	.CODE 
 		MAIN PROC FAR 
@@ -47,6 +49,7 @@ decimal_to_binary:
 in variable d1 
 	mov ax, 
 	d1 
+;----------------------------------
 print the value 
 	CALL PRINT 
 	MOV AH, 
@@ -81,7 +84,7 @@ if
 					PRINT ENDP 
 						END MAIN 
 
-
+;----------------------------------
 bubble_sort PROC: 
 mov cx, lengthArr
     sub cx, 1
@@ -114,7 +117,7 @@ mov cx, lengthArr
         stopLoops :
             ret
     BubbleSort ENDP
-
+;----------------------------------
 
 calculate_median: 
 mov ax, 0
@@ -126,7 +129,7 @@ inc ax
 no_remainder:
 mov si, 0
 mov cx, bx 
-
+;----------------------------------
 calculate_median_loop:
 add ax, [array + si]
 add si, 2
@@ -134,11 +137,12 @@ loop calculate_median_loop
 mov dx, ax
 mov ax, bx
 div dx     
-
+;----------------------------------
 calculate_average: 
 mov ax, 0  
 mov si, 0   
-mov cx, count   
+mov cx, count  
+;---------------------------------- 
 calculate_average_loop:
     add ax, [array + si]  
     add si, 2     
