@@ -40,24 +40,35 @@ read_numbers proc
 
 ;----------------------------------
 read_next: 
-        mov ah, 3Fh      
-        mov bx, 0       
-        mov cx, 1    
-        mov dx, offset oneChar 
-        int 21h        
+    mov ah, 3Fh      
+    mov bx, 0       
+    mov cx, 1    
+    mov dx, offset oneChar 
+     int 21h        
    or ax, ax       
-        jz read_end      
-        mov al, [oneChar] ; 
-        mov [currentLine + si], al  
-        mov dl, [currentLine + si]       
-        mov ah, 02h                 
-        int 21h       
-        inc si ; 
-        cmp al, 0Ah     
-        jz find_string_count_preparation       
-        jmp read_next 
-        
-        jmp convertChar  
+    jz read_end   
+
+
+    cmp oneChar, ' ' ;чи пробіл?Варіанти: або кінець певного числа, або просто розділювач мід числами
+    jz putNum  ;йдем до іншої мітки, щоб зверегти наше число
+    cmp oneChar, 13 ;сомвол поврнення каретки CR, ASCII код 13(завершення вводу числа )
+    je putNum
+    cmp oneChar, 10 ;символ нового рядка LF, ASCII код 10(але означає про завершення числа)
+    je putNum
+    cmp oneChar, '-'
+    je charIsMinus
+    cmp oneChar, '0'  ;простими словами "чм є меншим за 0" але від 0 до 9 було до добре
+    jb next ;Jump if Below
+     cmp oneChar, '9' ;якщо більше ніж 9, чи не перевищує діапазон цифр 
+    ja next ;Jump if Above ігнорування та читання наступного символу
+    jmp convertChar
+
+    charIsMinus:
+        mov minusChar, '-'
+        jmp read_next
+
+    convertChar 
+       
 ;----------------------------------
 decimal_to_binary: 
 		MAIN PROC FAR 
