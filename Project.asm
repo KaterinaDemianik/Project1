@@ -24,6 +24,12 @@ call printing
 call calculate_average
 call printing
 
+;end of the program
+mov ax, 4C00h 
+;ah отримує значення 4C- функція завершення програми з поверненням коду
+; завершення, а al отримує 00- як код завершення програми.
+    int 21h ;функція для переривання дос
+
 ;----------------------------------
 read_next: 
         mov ah, 3Fh      
