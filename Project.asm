@@ -69,14 +69,9 @@ read_next:
 
 ;----------------------------------
 convertChar 
- MAIN PROC FAR 
-			MOV AX, 
-	@DATA 
-		MOV DS, 
-	AX 
-in variable d1 
-	mov ax, 
-	d1 
+mov ax, numbers[di]
+mov cl, oneChar
+
 ;----------------------------------
  PRINT proc
 	MOV AH,02h 
